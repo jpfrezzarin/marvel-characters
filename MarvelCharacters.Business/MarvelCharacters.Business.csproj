@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarvelCharacters.Data\MarvelCharacters.Data.csproj" />
+    <ProjectReference Include="..\MarvelCharacters.Models\MarvelCharacters.Models.csproj" />
+  </ItemGroup>
+
+</Project>
