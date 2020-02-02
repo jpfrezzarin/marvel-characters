@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-The API requires the items to run normally. 
+The API requires these tools to run normally. 
 
 * [.NET Core SDK 3.1.101](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 * [.NET EF Core 3.1.1](https://www.nuget.org/packages/dotnet-ef/3.1.1)
@@ -16,7 +16,8 @@ The API requires the items to run normally.
 
 ### Prepare database
 
-First of all, prepare and up the database for the API. The solution uses the Entity Framework Core Code Firts to prepare, inicializate and populate the database. **Important**: check the connection string in the *appsettings.json* and change to the correct instance if necessary. 
+First of all, prepare and up the database for the API. The solution uses the Entity Framework Core Code Firts to prepare, inicializate and populate the database. 
+**Important**: check the connection string in the *appsettings.json* and change to the correct instance if necessary. 
 
 To up the database, run this command in project directory: 
 
