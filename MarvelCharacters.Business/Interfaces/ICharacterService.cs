@@ -1,11 +1,12 @@
 ﻿using MarvelCharacters.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarvelCharacters.Business.Interfaces
 {
     public interface ICharacterService
     {
-        IEnumerable<Character> Get();
-        Character Get(int id);
+        Task<IEnumerable<Character>> GetAll();
+        Task<Character> Get(int id);
     }
 }

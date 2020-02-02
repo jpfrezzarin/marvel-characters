@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MarvelCharacters.Business.Test
 {
@@ -28,55 +29,55 @@ namespace MarvelCharacters.Business.Test
         }
 
         [TestMethod]
-        public void Get_HasNoCharacter_ShouldReturnAnEmptyList()
+        public async Task Get_HasNoCharacter_ShouldReturnAnEmptyList()
         {
-            _characterRepository.Setup(repo => repo.Get()).Returns(new List<Character>().AsQueryable());
+            _characterRepository.Setup(repo => repo.GetAll(null)).ReturnsAsync(new List<Character>());
 
-            var result = _characterService.Get();
+            var result = await _characterService.GetAll();
 
             Assert.AreEqual(result.Count(), 0);
         }
 
         [TestMethod]
-        public void Get_HasOneCharacter_ShouldReturnAListWithOneCharacter()
+        public async Task Get_HasOneCharacter_ShouldReturnAListWithOneCharacter()
         {
             var spider = new Character { Name = "Spider-Man", Description = "Spider-Man" };
-            _characterRepository.Setup(repo => repo.Get()).Returns(new List<Character> { spider }.AsQueryable());
+            _characterRepository.Setup(repo => repo.GetAll(null)).ReturnsAsync(new List<Character> { spider });
 
-            var result = _characterService.Get();
+            var result = await _characterService.GetAll();
 
             Assert.AreEqual(result.Count(), 1);
         }
 
         [TestMethod]
-        public void Get_HasMoreThanOneCharacter_ShouldReturnAListWithMoreThanOneCharacter()
+        public async Task Get_HasMoreThanOneCharacter_ShouldReturnAListWithMoreThanOneCharacter()
         {
             var spider = new Character { Name = "Spider-Man", Description = "Spider-Man" };
             var iron = new Character { Name = "Iron-Man", Description = "Iron-Man" };
             var captain = new Character { Name = "Captain America", Description = "Captain America" };
             var thor = new Character { Name = "Thor", Description = "Thor" };
-            _characterRepository.Setup(repo => repo.Get()).Returns(new List<Character> { spider, iron, captain, thor }.AsQueryable());
+            _characterRepository.Setup(repo => repo.GetAll(null)).ReturnsAsync(new List<Character> { spider, iron, captain, thor });
 
-            var result = _characterService.Get();
+            var result = await _characterService.GetAll();
 
             Assert.AreEqual(result.Count(), 4);
         }
 
         [TestMethod]
-        public void Get_ExistingCharacter_ShouldReturnTheExistingCharacter()
+        public async Task Get_ExistingCharacter_ShouldReturnTheExistingCharacter()
         {
             var spider = new Character { Id = 1, Name = "Spider-Man", Description = "Spider-Man" };
-            _characterRepository.Setup(repo => repo.Get(spider.Id)).Returns(spider);
+            _characterRepository.Setup(repo => repo.Get(spider.Id)).ReturnsAsync(spider);
 
-            var result = _characterService.Get(spider.Id);
+            var result = await _characterService.Get(spider.Id);
 
             Assert.AreEqual(spider.Id, result.Id);
         }
 
         [TestMethod]
-        public void Get_NotExistingCharacter_ShouldThrowKeyNotFoundException()
+        public async Task Get_NotExistingCharacter_ShouldThrowKeyNotFoundException()
         {
-            Assert.ThrowsException<KeyNotFoundException>(() => _characterService.Get(0));
+            await Assert.ThrowsExceptionAsync<KeyNotFoundException>(async () => await _characterService.Get(0));
         }
     }
 }

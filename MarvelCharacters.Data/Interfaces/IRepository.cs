@@ -1,13 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace MarvelCharacters.Data.Interfaces
 {
 	public interface IRepository<TEntity>
     {
-        IQueryable<TEntity> Get(); 
-        TEntity Get(int id);
-        TEntity Create(TEntity entity);
-        TEntity Update(TEntity entity);
-        void Delete(TEntity entity);
+        Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> where = null); 
+        Task<TEntity> Get(int id);
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MarvelsCharacters.Api.Controllers.Base;
 using MarvelCharacters.API.Models;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace MarvelsCharacters.Api.Controllers
 {
@@ -21,11 +22,11 @@ namespace MarvelsCharacters.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Character>> Get()
+        public async Task<ActionResult<IEnumerable<Character>>> Get()
         {
             try 
             {
-                return Ok(_characterService.Get());
+                return Ok(await _characterService.GetAll());
             }
             catch (Exception ex)
             {
@@ -34,11 +35,11 @@ namespace MarvelsCharacters.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Character> Get(int id)
+        public async Task<ActionResult<Character>> Get(int id)
         {
             try 
             {
-                return Ok(_characterService.Get(id));
+                return Ok(await _characterService.Get(id));
             }
             catch (KeyNotFoundException ex) 
             {

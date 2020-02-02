@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using MarvelCharacters.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,31 +19,19 @@ namespace MarvelCharacters.Data
             _db = context.Set<TEntity>();
         }
 
-        public IQueryable<TEntity> Get() 
+        public async Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> where = null) 
         {
-            return _db.AsQueryable<TEntity>();
+            if (where != null)
+            {
+                return await _db.Where(where).ToListAsync();
+            }
+
+            return await _db.ToListAsync();
         }
 
-        public TEntity Get(int id)
+        public async Task<TEntity> Get(int id)
         {
-			return _db.Find(id);         
-        }
-
-        public TEntity Create(TEntity entity)
-        {
-            _db.Add(entity);
-            return entity;
-        }
-
-        public TEntity Update(TEntity entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-            return entity;
-        }
-
-        public void Delete(TEntity entity)
-        {
-            _context.Remove(entity);
+			return await _db.FindAsync(id);         
         }
     }
 }
