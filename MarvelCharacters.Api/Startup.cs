@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MarvelCharacters.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace MarvelsCharacters.Api
 {
@@ -22,7 +24,12 @@ namespace MarvelsCharacters.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                });
 
             // Configurando EF Core
             services.AddDbContext<MarvelCharactersContext>(options => {
