@@ -4,14 +4,16 @@ using MarvelCharacters.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MarvelCharacters.Data.Migrations
 {
     [DbContext(typeof(MarvelCharactersContext))]
-    partial class MarvelCharactersContextModelSnapshot : ModelSnapshot
+    [Migration("20200202192039_Comics")]
+    partial class Comics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

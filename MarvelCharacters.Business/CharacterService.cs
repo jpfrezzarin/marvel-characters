@@ -26,5 +26,12 @@ namespace MarvelCharacters.Business
             return await _repository.Get(id) ??
                 throw new KeyNotFoundException("This hero didn't save the world yet...");
         }
+
+        public async Task<IEnumerable<Comic>> GetAllComics(int id)
+        {
+            var character = await Get(id);
+
+            return character.CharacterComics.Select(c => c.Comic);
+        }
     }
 }

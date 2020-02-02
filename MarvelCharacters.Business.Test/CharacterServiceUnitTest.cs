@@ -7,6 +7,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MarvelCharacters.Models.Relationships;
 
 namespace MarvelCharacters.Business.Test
 {
@@ -29,7 +30,7 @@ namespace MarvelCharacters.Business.Test
         }
 
         [TestMethod]
-        public async Task Get_HasNoCharacter_ShouldReturnAnEmptyList()
+        public async Task GetAll_HasNoCharacter_ShouldReturnAnEmptyList()
         {
             _characterRepository.Setup(repo => repo.GetAll(null)).ReturnsAsync(new List<Character>());
 
@@ -39,7 +40,7 @@ namespace MarvelCharacters.Business.Test
         }
 
         [TestMethod]
-        public async Task Get_HasOneCharacter_ShouldReturnAListWithOneCharacter()
+        public async Task GetAll_HasOneCharacter_ShouldReturnAListWithOneCharacter()
         {
             var spider = new Character { Name = "Spider-Man", Description = "Spider-Man" };
             _characterRepository.Setup(repo => repo.GetAll(null)).ReturnsAsync(new List<Character> { spider });
@@ -50,7 +51,7 @@ namespace MarvelCharacters.Business.Test
         }
 
         [TestMethod]
-        public async Task Get_HasMoreThanOneCharacter_ShouldReturnAListWithMoreThanOneCharacter()
+        public async Task GetAll_HasMoreThanOneCharacter_ShouldReturnAListWithMoreThanOneCharacter()
         {
             var spider = new Character { Name = "Spider-Man", Description = "Spider-Man" };
             var iron = new Character { Name = "Iron-Man", Description = "Iron-Man" };
@@ -64,7 +65,7 @@ namespace MarvelCharacters.Business.Test
         }
 
         [TestMethod]
-        public async Task Get_ExistingCharacter_ShouldReturnTheExistingCharacter()
+        public async Task Get_CharacterExists_ShouldReturnTheExistingCharacter()
         {
             var spider = new Character { Id = 1, Name = "Spider-Man", Description = "Spider-Man" };
             _characterRepository.Setup(repo => repo.Get(spider.Id)).ReturnsAsync(spider);
@@ -75,9 +76,40 @@ namespace MarvelCharacters.Business.Test
         }
 
         [TestMethod]
-        public async Task Get_NotExistingCharacter_ShouldThrowKeyNotFoundException()
+        public async Task Get_CharacterNotExists_ShouldThrowKeyNotFoundException()
         {
             await Assert.ThrowsExceptionAsync<KeyNotFoundException>(async () => await _characterService.Get(0));
+        }
+
+        [TestMethod]
+        public async Task GetAllComics_CharacterWithNoComics_ShouldReturnAnEmptyList()
+        {
+            var spider = new Character { Id = 1, Name = "Spider-Man", Description = "Spider-Man" };
+            _characterRepository.Setup(repo => repo.Get(spider.Id)).ReturnsAsync(spider);
+
+            var result = await _characterService.GetAllComics(spider.Id);
+
+            Assert.AreEqual(result.Count(), 0);
+        }
+
+        [TestMethod]
+        public async Task GetAllComics_CharacterWithOneComics_ShouldReturnAListWithOneComic()
+        {
+            var comic = new Comic { Id = 1, Title = "The Amazing Spider-Man", Description = "The Amazing Spider-Man" };
+            var rel = new CharacterComic { Comic = comic };
+            var spider = new Character { Id = 1, Name = "Spider-Man", Description = "Spider-Man", CharacterComics = new List<CharacterComic> { rel } };
+
+            _characterRepository.Setup(repo => repo.Get(spider.Id)).ReturnsAsync(spider);
+
+            var result = await _characterService.GetAllComics(spider.Id);
+
+            Assert.AreEqual(result.Count(), 1);
+        }
+
+        [TestMethod]
+        public async Task GetAllComics_CharacterNotExists_ShouldThrowKeyNotFoundException()
+        {
+            await Assert.ThrowsExceptionAsync<KeyNotFoundException>(async () => await _characterService.GetAllComics(0));
         }
     }
 }

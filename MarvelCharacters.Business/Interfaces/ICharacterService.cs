@@ -8,5 +8,6 @@ namespace MarvelCharacters.Business.Interfaces
     {
         Task<IEnumerable<Character>> GetAll();
         Task<Character> Get(int id);
+        Task<IEnumerable<Comic>> GetAllComics(int id);
     }
 }

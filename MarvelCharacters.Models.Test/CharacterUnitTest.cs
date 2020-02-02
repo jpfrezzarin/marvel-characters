@@ -42,19 +42,5 @@ namespace MarvelCharacters.Models.Test
         {
             Assert.IsInstanceOfType(_character.Modified, typeof(DateTime));
         }
-
-        [TestMethod]
-        public void Character_PropertyResourceUri_IsStringType()
-        {
-            Assert.IsInstanceOfType(_character.ResourceUri, typeof(string));
-        }
-
-        [TestMethod]
-        public void Character_PropertyResourceUri_ShouldReturnCorrectResourceUri()
-        {
-            var expected = $"/characters/{_character.Id}";
-
-            Assert.AreEqual(_character.ResourceUri, expected);
-        }
     }
 }

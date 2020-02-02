@@ -7,6 +7,8 @@ using MarvelsCharacters.Api.Controllers.Base;
 using MarvelCharacters.API.Models;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using System.Linq;
+using MarvelsCharacters.Api.Mapper;
 
 namespace MarvelsCharacters.Api.Controllers
 {
@@ -26,11 +28,13 @@ namespace MarvelsCharacters.Api.Controllers
         {
             try 
             {
-                return Ok(await _characterService.GetAll());
+                var characters = await _characterService.GetAll();
+                var viewModels = characters.Select(c => c.ToViewModel());
+                return Ok(viewModels);
             }
             catch (Exception ex)
             {
-                return InternalServerError(new Error { Code = StatusCodes.Status500InternalServerError, Message = ex.Message });
+                return InternalServerError(new ErrorViewModel { Code = StatusCodes.Status500InternalServerError, Message = ex.Message });
             }
         }
 
@@ -39,15 +43,32 @@ namespace MarvelsCharacters.Api.Controllers
         {
             try 
             {
-                return Ok(await _characterService.Get(id));
+                var character = await _characterService.Get(id);
+                var viewModel = character.ToViewModel();
+                return Ok(viewModel);
             }
             catch (KeyNotFoundException ex) 
             {
-                return NotFound(new Error { Code = StatusCodes.Status404NotFound, Message = ex.Message });
+                return NotFound(new ErrorViewModel { Code = StatusCodes.Status404NotFound, Message = ex.Message });
             }
             catch (Exception ex) 
             {
-                return InternalServerError(new Error { Code = StatusCodes.Status500InternalServerError, Message = ex.Message });
+                return InternalServerError(new ErrorViewModel { Code = StatusCodes.Status500InternalServerError, Message = ex.Message });
+            }
+        }
+
+        [HttpGet("{id}/comics")]
+        public async Task<ActionResult<Character>> GetComics(int id)
+        {
+            try
+            {
+                var comics = await _characterService.GetAllComics(id);
+                var viewModels = comics.Select(c => c.ToViewModel());
+                return Ok(viewModels);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(new ErrorViewModel { Code = StatusCodes.Status500InternalServerError, Message = ex.Message });
             }
         }
     }
